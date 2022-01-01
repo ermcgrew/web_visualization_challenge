@@ -11,9 +11,9 @@ async function main() {
 
 
     //arrays of data for initial load, already sorted by descending sample_values
-    let sample_values = Object.values(data.samples[0].sample_values).slice(0,10);
+    let sample_values = Object.values(data.samples[0].sample_values);
     // console.log(sample_values);
-    let otu_ids = Object.values(data.samples[0].otu_ids).slice(0,10);
+    let otu_ids = Object.values(data.samples[0].otu_ids);
   
     //add "OTU" to beginning of otu id numbers
     for (let i = 0; i < otu_ids.length; i++){
@@ -21,15 +21,15 @@ async function main() {
     };
     // console.log(otu_ids);
 
-    let otu_labels = Object.values(data.samples[0].otu_labels).slice(0,10);
+    let otu_labels = Object.values(data.samples[0].otu_labels);
     // console.log(otu_labels);
 
 
     //Trace 1, horizontal bar chart (dropdown menu?) of top 10 OTUs/individual
-    let trace = [{
-        x: sample_values, 
-        y: otu_ids,
-        text: otu_labels,
+    let trace1 = [{
+        x: sample_values.slice(0,10), 
+        y: otu_ids.slice(0,10),
+        text: otu_labels.slice(0,10),
         type: 'bar',
         orientation: 'h' 
     }];
@@ -38,20 +38,51 @@ async function main() {
         
     // }; 
 
-    Plotly.newPlot('bar', trace);//, layout);
+    Plotly.newPlot('bar', trace1);//, layout);
+
 
     //Trace 2, Bubble chart of each sample
-    // Use otu_ids for the x values.
-    // Use sample_values for the y values.
-    // Use sample_values for the marker size.
-    // Use otu_ids for the marker colors.
-    // Use otu_labels for the text values.
+    let trace2 =[{
+        x: otu_ids,
+        y: sample_values,
+        text: otu_labels,
+        mode: 'markers',
+        marker: {
+          color: otu_ids, 
+          size: sample_values
+        }
+    }];
+
+    Plotly.newPlot('bubble', trace2);
 
 
     //Display the sample metadata, i.e., an individual's demographic information.
     //Display each key-value pair from the metadata JSON object somewhere on the page.
+    //each key-value pair becomes an unordered list item, added to target element with class="panel-body"
+    
+    //transform data.metadata dictionary into array of strings "id: 928"
+    console.log(data.metadata[0]); //values
+    // console.log(Object.keys(data.metadata[0])); //keys
+
+    let metadataKeys = Object.keys(data.metadata[0]);
+    // console.log(metadataKeys);
+    let metadataArray = [];
+    //.map function? keys/values, object.keys(data.metadata[0]) + data.metadata[0]
 
 
+    // console.log(Array.from(data.metadata[0]));
+
+
+    //add each pair to ul
+    const newUl = document.createElement('ul');
+    for (let i=0; i<data.metadata[0]; i++) {
+        newUl.textContent = data.metadata[0].i;
+        console.log(newUl);
+        document.querySelector('.panel-body').append(newUl);
+    };
+    
+    
+    
     //Add eventListener to change which sample is displayed
 
 };
