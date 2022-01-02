@@ -11,17 +11,12 @@ async function main() {
 
     //arrays of data for initial load, already sorted by descending sample_values
     let sample_values = Object.values(data.samples[0].sample_values);
-    let otu_ids = Object.values(data.samples[0].otu_ids);
-  
-    let otu_ids_labeled = [];
-    //add "OTU" to beginning of otu id numbers for trace1
-    for (let i = 0; i < otu_ids.length; i++){
-        otu_ids_labeled[i] = "OTU " + otu_ids[i];
-    };
-   
     let otu_labels = Object.values(data.samples[0].otu_labels);
-   
+    let otu_ids = Object.values(data.samples[0].otu_ids);
+    //add "OTU" to beginning of otu id numbers for trace1
+    let otu_ids_labeled = otu_ids.map(id => "OTU " + id);
 
+    
     //Trace 1, horizontal bar chart of top 10 OTUs/individual
     //already sorted from least to greatest, so slice first 10, then 
     //reverse array order so highest # appears at top of graph
@@ -53,55 +48,46 @@ async function main() {
     }];
 
     let layout2 = {
-        // title: 'Number of samples per OTU',
+        title: 'Number of samples per OTU',
         xaxis: {
           title: 'OTU ID',
-        //   titlefont: {
-        //     family: 'Arial, sans-serif',
-        //     size: 18,
-        //     color: 'lightgrey'
-          },
-        // yaxis: {
-        //     title: 'AXIS TITLE',
-            // titlefont: {
-            //   family: 'Arial, sans-serif',
-            //   size: 18,
-            //   color: 'bl'
-            // }, 
-        };
+          }, 
+    };
     
     Plotly.newPlot('bubble', trace2, layout2);
 
 
-    //Display the sample metadata, i.e., an individual's demographic information.
-    //Display each key-value pair from the metadata JSON object somewhere on the page.
-    //each key-value pair becomes an unordered list item, added to target element with class="panel-body"
+    //Display the sample metadata (individual's demographic information)
+    //each key-value pair becomes an unordered list item, 
+    //added to target element with class="panel-body"
     
-    //transform data.metadata dictionary into array of strings "id: 928"
-    console.log(data.metadata[0]); //values
+
+    //transform data.metadata object into array of strings "id: 928"
+    // console.log(data.metadata[0]); //values
     // console.log(Object.keys(data.metadata[0])); //keys
 
-    let metadataKeys = Object.keys(data.metadata[0]);
-    // console.log(metadataKeys);
-    let metadataArray = [];
-    //.map function? keys/values, object.keys(data.metadata[0]) + data.metadata[0]
+  
+    //need an array of objects
+    let metadataStrings = (metadataObject).map((item,index) => `${index}: ${item}`);
+    console.log(metadataStrings);
 
-
-    // console.log(Array.from(data.metadata[0]));
+   
 
 
     //add each pair to ul
-    const newUl = document.createElement('ul');
+    // const newUl = document.createElement('ul');
     // for (let i=0; i<data.metadata[0]; i++) {
     //     newUl.textContent = data.metadata[0].i;
     //     console.log(newUl);
     //     document.querySelector('.panel-body').append(newUl);
     // };
     
-    newUl.textContent = data.metadata[0];
-    console.log(newUl);
-    document.querySelector('.panel-body').append(newUl);
+    // newUl.textContent = data.metadata[0];
+    // console.log(newUl);
+    // document.querySelector('.panel-body').append(newUl);
     
+
+    //************************************************************* */
     //Add eventListener to change which sample is displayed
 
 };
