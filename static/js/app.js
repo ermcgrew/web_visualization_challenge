@@ -5,10 +5,6 @@ async function main() {
     const response = await fetch("./samples.json");
     const data = await response.json();
 
-    //testing
-    // console.log(data.metadata[0]); //access metadata
-    // console.log(data.samples[0]); //access sample info
-
     //arrays of data for initial load, already sorted by descending sample_values
     let sample_values = Object.values(data.samples[0].sample_values);
     let otu_labels = Object.values(data.samples[0].otu_labels);
@@ -29,7 +25,7 @@ async function main() {
     }];
 
     const layout1 = {
-        title: 'Top 10 Occuring OTUs'
+        title: '10 Most Frequently Occuring OTUs'
     }; 
 
     Plotly.newPlot('bar', trace1, layout1);
@@ -71,6 +67,22 @@ async function main() {
 
     //************************************************************* */
     //Add eventListener to change which sample is displayed
+    document.querySelector("#selDataset").addEventListener("change", event => {
+    //find matching sample id
+        console.log(event.target.value)
+    //update arrays for:
+    // let sample_values = Object.values(data.samples[0].sample_values);
+    // let otu_labels = Object.values(data.samples[0].otu_labels);
+    // let otu_ids = Object.values(data.samples[0].otu_ids);
+    // //add "OTU" to beginning of otu id numbers for trace1
+    // let otu_ids_labeled = otu_ids.map(id => "OTU " + id);
+    // let metadataStrings = (Object.entries(data.metadata[0])).map(item => `${item[0]}: ${item[1]}`);
+
+    //two plotly updates
+
+    //update metadata??
+
+    }); //matches eventListener function
 
 };
 
