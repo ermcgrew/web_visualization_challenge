@@ -5,40 +5,39 @@ async function main() {
     const response = await fetch("./samples.json");
     const data = await response.json();
 
-    //test
+    //testing
     // console.log(data.metadata[0]); //access metadata
     // console.log(data.samples[0]); //access sample info
 
-
     //arrays of data for initial load, already sorted by descending sample_values
     let sample_values = Object.values(data.samples[0].sample_values);
-    // console.log(sample_values);
     let otu_ids = Object.values(data.samples[0].otu_ids);
   
-    //add "OTU" to beginning of otu id numbers
+    let otu_ids_labeled = [];
+    //add "OTU" to beginning of otu id numbers for trace1
     for (let i = 0; i < otu_ids.length; i++){
-        otu_ids[i] = "OTU " + otu_ids[i];
+        otu_ids_labeled[i] = "OTU " + otu_ids[i];
     };
-    // console.log(otu_ids);
-
+   
     let otu_labels = Object.values(data.samples[0].otu_labels);
-    // console.log(otu_labels);
+   
 
-
-    //Trace 1, horizontal bar chart (dropdown menu?) of top 10 OTUs/individual
+    //Trace 1, horizontal bar chart of top 10 OTUs/individual
+    //already sorted from least to greatest, so slice first 10, then 
+    //reverse array order so highest # appears at top of graph
     let trace1 = [{
-        x: sample_values.slice(0,10), 
-        y: otu_ids.slice(0,10),
-        text: otu_labels.slice(0,10),
+        x: sample_values.slice(0,10).reverse(), 
+        y: otu_ids_labeled.slice(0,10).reverse(),
+        text: otu_labels.slice(0,10).reverse(),
         type: 'bar',
         orientation: 'h' 
     }];
 
-    // const layout = {
-        
-    // }; 
+    const layout1 = {
+        title: 'Top 10 Occuring OTUs'
+    }; 
 
-    Plotly.newPlot('bar', trace1);//, layout);
+    Plotly.newPlot('bar', trace1, layout1);
 
 
     //Trace 2, Bubble chart of each sample
@@ -48,12 +47,30 @@ async function main() {
         text: otu_labels,
         mode: 'markers',
         marker: {
-          color: otu_ids, 
+          color: otu_ids, //change color scheme?
           size: sample_values
         }
     }];
 
-    Plotly.newPlot('bubble', trace2);
+    let layout2 = {
+        // title: 'Number of samples per OTU',
+        xaxis: {
+          title: 'OTU ID',
+        //   titlefont: {
+        //     family: 'Arial, sans-serif',
+        //     size: 18,
+        //     color: 'lightgrey'
+          },
+        // yaxis: {
+        //     title: 'AXIS TITLE',
+            // titlefont: {
+            //   family: 'Arial, sans-serif',
+            //   size: 18,
+            //   color: 'bl'
+            // }, 
+        };
+    
+    Plotly.newPlot('bubble', trace2, layout2);
 
 
     //Display the sample metadata, i.e., an individual's demographic information.
@@ -75,13 +92,15 @@ async function main() {
 
     //add each pair to ul
     const newUl = document.createElement('ul');
-    for (let i=0; i<data.metadata[0]; i++) {
-        newUl.textContent = data.metadata[0].i;
-        console.log(newUl);
-        document.querySelector('.panel-body').append(newUl);
-    };
+    // for (let i=0; i<data.metadata[0]; i++) {
+    //     newUl.textContent = data.metadata[0].i;
+    //     console.log(newUl);
+    //     document.querySelector('.panel-body').append(newUl);
+    // };
     
-    
+    newUl.textContent = data.metadata[0];
+    console.log(newUl);
+    document.querySelector('.panel-body').append(newUl);
     
     //Add eventListener to change which sample is displayed
 
