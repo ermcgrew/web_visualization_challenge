@@ -58,34 +58,16 @@ async function main() {
 
 
     //Display the sample metadata (individual's demographic information)
-    //each key-value pair becomes an unordered list item, 
-    //added to target element with class="panel-body"
-    
+    //transform data.metadata object into array of strings e.g. "id: 928"
+    let metadataStrings = (Object.entries(data.metadata[0])).map(item => `${item[0]}: ${item[1]}`);
 
-    //transform data.metadata object into array of strings "id: 928"
-    // console.log(data.metadata[0]); //values
-    // console.log(Object.keys(data.metadata[0])); //keys
+    //add to element with class="panel-body"
+    let newP = document.createElement('p');
 
-  
-    //need an array of objects
-    let metadataStrings = (metadataObject).map((item,index) => `${index}: ${item}`);
-    console.log(metadataStrings);
-
-   
-
-
-    //add each pair to ul
-    // const newUl = document.createElement('ul');
-    // for (let i=0; i<data.metadata[0]; i++) {
-    //     newUl.textContent = data.metadata[0].i;
-    //     console.log(newUl);
-    //     document.querySelector('.panel-body').append(newUl);
-    // };
-    
-    // newUl.textContent = data.metadata[0];
-    // console.log(newUl);
-    // document.querySelector('.panel-body').append(newUl);
-    
+    metadataStrings.map(item => {
+        document.querySelector('.panel-body').append(item, newP);
+        document.querySelector('.panel-body').append(document.createElement('br')); //line break for next element
+    });
 
     //************************************************************* */
     //Add eventListener to change which sample is displayed
