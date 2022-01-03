@@ -9,14 +9,23 @@ async function optionChanged(valueSel) {
     //if a selection from the drop-down is made:
     if (valueSel){
         console.log(valueSel);
+        console.log(data.samples[0].id);
+                
+        let nameList = data.names;
+
+        let selection = nameList.filter(name => name === valueSel);//always gives 0, array is one item long
+        console.log(selection);
         //find matching sample id
         //need the index number  
         // let selection = names.find(name => name === valueSel);
+        // .filter
+
         // let indexSel = 
-        // data.samples[indexSel]
+        // data.samples[].id
         // data.samples is an Array of objects
+
         // [
-        //     {id:904 (key:value)
+        //     {id:904 (key:value),
 
         //     },
         //     {

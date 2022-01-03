@@ -5,7 +5,7 @@ async function main() {
     const response = await fetch("./samples.json");
     const data = await response.json();
 
-    
+
     //arrays of data for initial load, already sorted by descending sample_values
     let sample_values = Object.values(data.samples[0].sample_values);
     let otu_labels = Object.values(data.samples[0].otu_labels);
@@ -56,7 +56,8 @@ async function main() {
 
     //Display the sample metadata (individual's demographic information)
     //transform data.metadata object into array of strings e.g. "id: 928"
-    let metadataStrings = (Object.entries(data.metadata[0])).map(item => `${item[0]}: ${item[1]}`);
+    let metadataStrings = (Object.entries(data.metadata[0]))
+        .map(item => `${item[0]}: ${item[1]}`);
 
     //add to element with class="panel-body"
     let newP = document.createElement('p');
@@ -83,7 +84,6 @@ async function main() {
         newOption.setAttributeNode(attributeVal);
     }; 
 
-
 };
 
 //call main to initialize page
@@ -95,14 +95,15 @@ function optionChanged(valueSel){
     console.log(valueSel);
 
     //find matching sample id
-        
+    let     
     //update arrays for:
         // let sample_values = Object.values(data.samples[0].sample_values);
         // let otu_labels = Object.values(data.samples[0].otu_labels);
         // let otu_ids = Object.values(data.samples[0].otu_ids);
         // //add "OTU" to beginning of otu id numbers for trace1
         // let otu_ids_labeled = otu_ids.map(id => "OTU " + id);
-        // let metadataStrings = (Object.entries(data.metadata[0])).map(item => `${item[0]}: ${item[1]}`);
+        // let metadataStrings = (Object.entries(data.metadata[0]))
+            //.map(item => `${item[0]}: ${item[1]}`);
     
         //two plotly updates
     
