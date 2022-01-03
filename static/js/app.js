@@ -5,6 +5,7 @@ async function main() {
     const response = await fetch("./samples.json");
     const data = await response.json();
 
+    
     //arrays of data for initial load, already sorted by descending sample_values
     let sample_values = Object.values(data.samples[0].sample_values);
     let otu_labels = Object.values(data.samples[0].otu_labels);
@@ -59,7 +60,6 @@ async function main() {
 
     //add to element with class="panel-body"
     let newP = document.createElement('p');
-
     metadataStrings.map(item => {
         document.querySelector('.panel-body').append(item, newP);
         document.querySelector('.panel-body').append(document.createElement('br')); //line break for next element
@@ -68,42 +68,21 @@ async function main() {
 
     //populate drop-down with sample ID names
     let names = Object.values(data.names); 
-    console.log(typeof(names));
-
-
-    //**************************** */
-    //How to loop this section over array of data.names?
-
-    // const attributeVal = document.createAttribute('value');
-    // const newOption = document.createElement('option');
-
-    // newOption.textContent = names[0];
-    // attributeVal.value = names[0];
-
-    // document.querySelector("#selDataset").append(newOption);
-    // newOption.setAttributeNode(attributeVal);
-
-    //testing a loop
-    let testArray = ["940", "941", "943", "944"];
-
-    const attributeVal = document.createAttribute('value');
-    const newOption = document.createElement('option');
-
-    // for (i=0; i<testArray.length; i++) {
-    //     newOption.textContent = testArray[i];
-    //     attributeVal.value = testArray[i];
-    //     console.log(`Loop ${i}: ${testArray[i]}, ${newOption.textContent}`)
-    //     document.querySelector("#selDataset").append(newOption);
-    //     newOption.setAttributeNode(attributeVal);
-    // } //why does this only add the last item in the array?
-
- 
-    testArray.map(name => {
-        newOption.textContent = name;
-        attributeVal.value = name;
+    for (i=0; i<names.length; i++) {
+        //set create methods as variables (have to do this inside the loop)
+        const newOption = document.createElement('option');
+        const attributeVal = document.createAttribute('value');
+        
+        //set display text and value to sample id name
+        newOption.textContent = names[i];
+        attributeVal.value = names[i];
+        
+        //add newOption
         document.querySelector("#selDataset").append(newOption);
+        //add value attribute 
         newOption.setAttributeNode(attributeVal);
-    });
+    }; 
+
 
 };
 
@@ -116,7 +95,8 @@ function optionChanged(valueSel){
     console.log(valueSel);
 
     //find matching sample id
-        //update arrays for:
+        
+    //update arrays for:
         // let sample_values = Object.values(data.samples[0].sample_values);
         // let otu_labels = Object.values(data.samples[0].otu_labels);
         // let otu_ids = Object.values(data.samples[0].otu_ids);
