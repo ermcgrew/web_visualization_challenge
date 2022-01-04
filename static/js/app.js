@@ -1,4 +1,4 @@
-//function for generating plots
+//function from html code, passes in the value selected
 async function optionChanged(valueSel) {
 
     //load data from json file
