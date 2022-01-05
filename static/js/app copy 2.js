@@ -23,24 +23,18 @@ async function optionChanged(valueSel) {
     }; 
 
 
+    //declare variable to hold index # outside for/if loop
+    let indexSel = 0;
+
     if (valueSel) {  //if a selection from the drop-down is made
-        
         // find matching sample id index number    
-        let indexSel = 0;
         for (let i=0; i<names.length;i++) {
             if (data.samples[i].id === valueSel){
                 indexSel = i;
             }
         };
-        //Call function to populate graphs & metadata
-        displaySample(indexSel);
-    } else { 
-        //initial page load: graphs and metadata of first sample
-        displaySample(0);   
-    };
 
-    function displaySample(indexSel) {
-        //create arrays for selected sample:
+        //update arrays with new sample:
         let sample_values = Object.values(data.samples[indexSel].sample_values);
         let otu_labels = Object.values(data.samples[indexSel].otu_labels);
         let otu_ids = Object.values(data.samples[indexSel].otu_ids);
@@ -50,7 +44,7 @@ async function optionChanged(valueSel) {
             .map(item => `${item[0]}: ${item[1]}`);
         
 
-        //Trace 1, horizontal bar chart of top 10 samples
+        //two plotly updates
         let trace1 = [{
             x: sample_values.slice(0,10).reverse(), 
             y: otu_ids_labeled.slice(0,10).reverse(),
@@ -85,7 +79,70 @@ async function optionChanged(valueSel) {
         };
         
         Plotly.newPlot('bubble', trace2, layout2);
-    
+           
+        //remove previous sample metadata
+        let oldMeta = document.querySelectorAll('#meta');
+        for (let i=0;i<oldMeta.length;i++) {
+            oldMeta[i].remove();
+        }
+     
+        //display current sample metadata
+        metadataStrings.map(item => {
+            let newP = document.createElement('p');
+            newP.textContent = item;
+            newP.id = "meta";
+            document.querySelector('.panel-body').appendChild(newP);
+        });
+
+    }
+    else { 
+        //arrays of data for initial load, already sorted by descending sample_values
+        let sample_values = Object.values(data.samples[0].sample_values);
+        let otu_labels = Object.values(data.samples[0].otu_labels);
+        let otu_ids = Object.values(data.samples[0].otu_ids);
+        //add "OTU" to beginning of otu id numbers for trace1
+        let otu_ids_labeled = otu_ids.map(id => "OTU " + id);
+
+        
+        //Trace 1, horizontal bar chart of top 10 OTUs/individual
+        //already sorted from least to greatest, so slice first 10, then 
+        //reverse array order so highest # appears at top of graph
+        let trace1 = [{
+            x: sample_values.slice(0,10).reverse(), 
+            y: otu_ids_labeled.slice(0,10).reverse(),
+            text: otu_labels.slice(0,10).reverse(),
+            type: 'bar',
+            orientation: 'h' 
+        }];
+
+        const layout1 = {
+            title: '10 Most Frequently Occuring OTUs'
+        }; 
+
+        Plotly.newPlot('bar', trace1, layout1);
+
+
+        //Trace 2, Bubble chart of each sample
+        let trace2 =[{
+            x: otu_ids,
+            y: sample_values,
+            text: otu_labels,
+            mode: 'markers',
+            marker: {
+            color: otu_ids,
+            size: sample_values
+            }
+        }];
+
+        let layout2 = {
+            title: 'Number of samples per OTU',
+            xaxis: {
+            title: 'OTU ID',
+            }, 
+        };
+        
+        Plotly.newPlot('bubble', trace2, layout2);
+
         // //washing frequency gauge--bonus
         // let trace3 = [{
             
@@ -113,20 +170,20 @@ async function optionChanged(valueSel) {
         // let layout3 = { width: 600, height: 500, margin: { t: 0, b: 0 } };
         // Plotly.newPlot('gauge', trace3, layout3);
 
-        //remove any previous sample metadata
-        let oldMeta = document.querySelectorAll('#meta');
-        for (let i=0;i<oldMeta.length;i++) {
-            oldMeta[i].remove();
-        }
-     
-        //display current sample metadata
+        //Display the sample metadata (individual's demographic information)
+        //transform data.metadata object into array of strings e.g. "id: 928"
+        let metadataStrings = (Object.entries(data.metadata[0]))
+            .map(item => `${item[0]}: ${item[1]}`);
+
+        //add to element with class="panel-body"
         metadataStrings.map(item => {
             let newP = document.createElement('p');
             newP.textContent = item;
-            newP.id = "meta";
+            newP.id = 'meta';
             document.querySelector('.panel-body').appendChild(newP);
         });
-    }
+        
+    };
 
 };
 
