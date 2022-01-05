@@ -82,14 +82,20 @@ async function optionChanged(valueSel) {
         
         Plotly.newPlot('bubble', trace2, layout2);
            
-        //update metadata
+        //remove previous sample metadata
+        let oldMeta = document.querySelectorAll('#meta');
+        for (let i=0;i<oldMeta.length;i++) {
+            oldMeta[i].remove();
+        }
+     
+        //append current sample metadata
         metadataStrings.map(item => {
             let newP = document.createElement('p');
             newP.textContent = item;
-            document.querySelector('.panel-body').append(item);
-            document.querySelector('.panel-body').append(document.createElement('br')); //line break for next element
+            newP.id = "meta";
+            document.querySelector('.panel-body').appendChild(newP);
         });
-    
+
     }
     else { 
         //arrays of data for initial load, already sorted by descending sample_values
@@ -149,12 +155,11 @@ async function optionChanged(valueSel) {
         metadataStrings.map(item => {
             let newP = document.createElement('p');
             newP.textContent = item;
-            document.querySelector('.panel-body').append(item);
-            document.querySelector('.panel-body').append(document.createElement('br')); //line break for next element
+            newP.id = 'meta';
+            document.querySelector('.panel-body').appendChild(newP);
         });
+        
     };
-
-    
 
 };
 
