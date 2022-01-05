@@ -1,6 +1,6 @@
 # web_visualization_challenge
 
-Goal: create interactive dashboard to view each sample from the (http://robdunnlab.com/projects/belly-button-biodiversity/Belly, "Button Biodiversity dataset"), which catalogs the microbes that colonize human navels. 
+Goal: create interactive dashboard to view each sample from the [Named Link] (http://robdunnlab.com/projects/belly-button-biodiversity/Belly, "Button Biodiversity dataset"), which catalogs the microbes that colonize human navels. 
 
 Utilizes vanilla javascript with Plotly.
 
