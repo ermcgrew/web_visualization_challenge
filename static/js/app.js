@@ -1,5 +1,4 @@
-//function from html code, passes in the value selected
-async function optionChanged(valueSel) {
+async function main() {
 
     //load data from json file
     const response = await fetch("./samples.json");
@@ -21,10 +20,15 @@ async function optionChanged(valueSel) {
         //add value attribute 
         newOption.setAttributeNode(attributeVal);
     }; 
+    
+    //initial page load: graphs and metadata of first sample
+    displaySample(0);
 
+    //if a selection from the drop-down is made
+    document.querySelector("#selDataset").addEventListener("change", optionChanged);
 
-    if (valueSel) {  //if a selection from the drop-down is made
-        
+    //function to change sample
+    function optionChanged(valueSel) {
         // find matching sample id index number    
         let indexSel = 0;
         for (let i=0; i<names.length;i++) {
@@ -34,11 +38,9 @@ async function optionChanged(valueSel) {
         };
         //Call function to populate graphs & metadata
         displaySample(indexSel);
-    } else { 
-        //initial page load: graphs and metadata of first sample
-        displaySample(0);   
     };
 
+    //function to load graphs and metadata for each sample
     function displaySample(indexSel) {
         //create arrays for selected sample:
         let sample_values = Object.values(data.samples[indexSel].sample_values);
@@ -126,9 +128,9 @@ async function optionChanged(valueSel) {
             newP.id = "meta";
             document.querySelector('.panel-body').appendChild(newP);
         });
-    }
+    };
 
 };
 
 //call to initialize page
-optionChanged();
+main();
