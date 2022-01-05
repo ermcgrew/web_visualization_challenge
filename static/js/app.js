@@ -25,7 +25,9 @@ async function main() {
     displaySample(0);
 
     //if a selection from the drop-down is made
-    document.querySelector("#selDataset").addEventListener("change", optionChanged);
+    // document.querySelector("#selDataset").addEventListener("change", optionChanged);
+    //document.addEventListener('click', event => {document.querySelector('option').value))}
+    //outside main function
 
     //function to change sample
     function optionChanged(valueSel) {
